@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Reflection;
 using System.Runtime.InteropServices;
 
@@ -34,6 +35,14 @@ namespace GSimpleWinSleepPreventer
             ES_SYSTEM_REQUIRED = 0x00000001
         }
 
+        readonly static Dictionary<string, EXECUTION_STATE> ExecutionStateMap = new Dictionary<string, EXECUTION_STATE>()
+        {
+            { "away", EXECUTION_STATE.ES_AWAYMODE_REQUIRED },
+            { "continuous", EXECUTION_STATE.ES_CONTINUOUS },
+            { "display", EXECUTION_STATE.ES_DISPLAY_REQUIRED },
+            { "system", EXECUTION_STATE.ES_SYSTEM_REQUIRED }
+        };
+
         [STAThread]
         static void Main(string[] args)
         {
@@ -41,33 +50,15 @@ namespace GSimpleWinSleepPreventer
             bool isShowHelpOnly = false;
             if (args.Length == 1)
             {
-                switch (args[0])
-                {
-                    case "--monitor":
-                    case "-m":
-                        PreventMonitorPowerdown();
-                        break;
-                    case "--sleep":
-                    case "-s":
-                        PreventSleep();
-                        break;
-                    case "--awake":
-                    case "-a":
-                        KeepSystemAwake();
-                        break;
-                    case "--help":
-                    case "-h":
-                        PrintHelp();
-                        break;
-                    default:
-                        Console.WriteLine($"{args[0]} is an unknown command.");
-                        isShowHelpOnly = true;
-                        break;
-                }
+                isShowHelpOnly = ParseSingleParam(args[0]);
+            }
+            else if (args.Length == 0)
+            {
+                isShowHelpOnly = true;
             }
             else
             {
-                isShowHelpOnly = true;
+                isShowHelpOnly = ParseMultipleParams(args);
             }
 
             if (isShowHelpOnly)
@@ -89,6 +80,67 @@ namespace GSimpleWinSleepPreventer
             Console.WriteLine("  --sleep, -s      Prevent Idle-to-Sleep (monitor not affected).");
             Console.WriteLine("  --awake, -a      Keep system awake.");
             Console.WriteLine("  --help, -h       Show help.");
+        }
+
+        static bool ParseSingleParam(string arg)
+        {
+            bool isShowHelpOnly = false;
+            switch (arg)
+            {
+                case "--monitor":
+                case "-m":
+                    PreventMonitorPowerdown();
+                    break;
+                case "--sleep":
+                case "-s":
+                    PreventSleep();
+                    break;
+                case "--awake":
+                case "-a":
+                    KeepSystemAwake();
+                    break;
+                case "--help":
+                case "-h":
+                    PrintHelp();
+                    break;
+                default:
+                    Console.WriteLine($"{arg} is an unknown command.");
+                    isShowHelpOnly = true;
+                    break;
+            }
+            return isShowHelpOnly;
+        }
+
+        static bool ParseMultipleParams(string[] args)
+        {
+            bool isShowHelpOnly = false;
+            if (args[0] == "--ExecutionState" || args[0] == "-es")
+            {
+                EXECUTION_STATE executionStateMode = 0;
+                for (int i = 1; i < args.Length; i++)
+                {
+                    if (ExecutionStateMap.ContainsKey(args[i]))
+                    {
+                        executionStateMode |= ExecutionStateMap[args[i]];
+                    }
+                    else
+                    {
+                        Console.WriteLine($"{args[i]} is an unknown key.");
+                        isShowHelpOnly = true;
+                        break;
+                    }
+                }
+                if (!isShowHelpOnly)
+                {
+                    SetThreadExecutionState(executionStateMode);
+                }
+            }
+            else
+            {
+                Console.WriteLine($"{args[0]} is an unknown command.");
+                isShowHelpOnly = true;
+            }
+            return isShowHelpOnly;
         }
 
         /// <summary>
