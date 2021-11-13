@@ -75,11 +75,25 @@ namespace GSimpleWinSleepPreventer
 
         static void PrintHelp()
         {
-            Console.WriteLine("Help:");
-            Console.WriteLine("  --monitor, -m    Prevent only monitor powerdown.");
-            Console.WriteLine("  --sleep, -s      Prevent Idle-to-Sleep (monitor not affected).");
-            Console.WriteLine("  --awake, -a      Keep system awake.");
-            Console.WriteLine("  --help, -h       Show help.");
+            Console.WriteLine("Help.");
+            Console.WriteLine("\nFast modes:");
+            Console.WriteLine("  --monitor, -m          Prevent only monitor powerdown.");
+            Console.WriteLine("  --sleep, -s            Prevent Idle-to-Sleep (monitor not affected).");
+            Console.WriteLine("  --awake, -a            Keep system awake.");
+            Console.WriteLine("  --help, -h             Show help.");
+            Console.WriteLine("\nManually set several modes:");
+            Console.WriteLine("  --ExecutionState, -es [modes]  Available modes: continuous, display, system, away.");
+            Console.WriteLine("                                 continuous - Informs the system that the state being set should remain in");
+            Console.WriteLine("                                              effect until the next call that uses ES_CONTINUOUS and one of");
+            Console.WriteLine("                                              the other state flags is cleared.");
+            Console.WriteLine("                                 display - Forces the display to be on by resetting the display idle timer.");
+            Console.WriteLine("                                 system - Forces the system to be in the working state by resetting the");
+            Console.WriteLine("                                          system idle timer.");
+            Console.WriteLine("                                 away - Enables away mode. This value must be specified with ES_CONTINUOUS.");
+            Console.WriteLine("                                        Away mode should be used only by media-recording and");
+            Console.WriteLine("                                        media-distribution applications that must perform critical");
+            Console.WriteLine("                                        background processing on desktop computers while the computer");
+            Console.WriteLine("                                        appears to be sleeping. See Remarks.");
         }
 
         static bool ParseSingleParam(string arg)
