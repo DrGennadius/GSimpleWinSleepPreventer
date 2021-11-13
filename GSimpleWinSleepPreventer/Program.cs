@@ -38,6 +38,7 @@ namespace GSimpleWinSleepPreventer
         static void Main(string[] args)
         {
             Console.WriteLine($"Simple Windows Sleep Preventer by Gennadius (Gennady Zykov). Version {Assembly.GetExecutingAssembly().GetName().Version}.\n");
+            bool isShowHelpOnly = false;
             if (args.Length == 1)
             {
                 switch (args[0])
@@ -60,18 +61,25 @@ namespace GSimpleWinSleepPreventer
                         break;
                     default:
                         Console.WriteLine($"{args[0]} is an unknown command.");
-                        PrintHelp();
+                        isShowHelpOnly = true;
                         break;
                 }
             }
             else
             {
-                PrintHelp();
+                isShowHelpOnly = true;
             }
 
-            Console.WriteLine("Type Enter to allow powerdown.");
-            Console.ReadLine();
-            AllowPowerdown();
+            if (isShowHelpOnly)
+            {
+                PrintHelp();
+            }
+            else
+            {
+                Console.WriteLine("Type Enter to allow powerdown.");
+                Console.ReadLine();
+                AllowPowerdown();
+            }
         }
 
         static void PrintHelp()
