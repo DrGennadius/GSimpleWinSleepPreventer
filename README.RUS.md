@@ -37,7 +37,7 @@ GSimpleWinSleepPreventer.exe -es display
 GSimpleWinSleepPreventer.exe -es system
 ```
 
-You can use multiple modes:
+Можно использовать несколько режимов:
 
 ```shell
 GSimpleWinSleepPreventer.exe -es continuous display system
