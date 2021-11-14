@@ -1,7 +1,7 @@
 # GSimpleWinSleepPreventer
 A utility for preventing Windows from falling asleep.
 
-See doc for Russian: README.RUS.md.
+See doc for Russian: [README.RUS.md](https://github.com/DrGennadius/GSimpleWinSleepPreventer/blob/master/README.RUS.md).
 
 The utility uses [SetThreadExecutionState](https://docs.microsoft.com/en-us/windows/win32/api/winbase/nf-winbase-setthreadexecutionstate) (kernel32).
 
