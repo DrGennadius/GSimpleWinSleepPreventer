@@ -11,6 +11,8 @@
 GSimpleWinSleepPreventer.exe -h
 ```
 
+![image](https://user-images.githubusercontent.com/27915885/141684747-f0d35e9d-c04a-4d04-a4b4-d2a89f78b450.png)
+
 **Можно установить несколько ручных режимов EXECUTION_STATE:**
 
 1. **away** (`ES_AWAYMODE_REQUIRED`)
@@ -43,6 +45,8 @@ GSimpleWinSleepPreventer.exe -es system
 GSimpleWinSleepPreventer.exe -es continuous display system
 ```
 
+![image](https://user-images.githubusercontent.com/27915885/141684828-e40b7e3e-7ed7-43d0-ac24-88a7ffc5b38b.png)
+
 **Вы можете установить один из быстрых режимов:**
 
 1. **monitor** - предотвратить только отключение монитора. Используются режимы: `ES_CONTINUOUS` и `ES_DISPLAY_REQUIRED`.
@@ -62,3 +66,5 @@ GSimpleWinSleepPreventer.exe -s
 ```shell
 GSimpleWinSleepPreventer.exe -a
 ```
+
+![image](https://user-images.githubusercontent.com/27915885/141684880-a91feced-723b-42a5-8092-534e2dd296d0.png)
