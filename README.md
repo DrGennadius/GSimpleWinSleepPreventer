@@ -73,7 +73,7 @@ GSimpleWinSleepPreventer.exe -a
 
 ![image](https://user-images.githubusercontent.com/27915885/141684880-a91feced-723b-42a5-8092-534e2dd296d0.png)
 
-## Windows Service
+## Windows Service (not working yet)
 
 You can install service on system.
 
