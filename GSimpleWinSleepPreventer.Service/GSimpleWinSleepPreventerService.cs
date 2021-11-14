@@ -8,6 +8,7 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using System.ServiceProcess;
 using System.Text;
+using System.Threading;
 
 namespace GSimpleWinSleepPreventer.Service
 {
@@ -18,6 +19,9 @@ namespace GSimpleWinSleepPreventer.Service
 
         const string _eventSourceName = "GSimpleWinSleepPreventerService";
         const string _logName = "GSimpleWinSleepPreventerServiceLog";
+
+        ManualResetEvent _shutdownEvent = new ManualResetEvent(false);
+        Thread _thread;
 
         [Flags]
         public enum EXECUTION_STATE : uint
@@ -68,34 +72,49 @@ namespace GSimpleWinSleepPreventer.Service
         protected override void OnStart(string[] args)
         {
             eventLog.WriteEntry($"Starting Simple Windows Sleep Preventer by Gennadius (Gennady Zykov). Version {Assembly.GetExecutingAssembly().GetName().Version}.\n");
-            bool isSuccess = true;
-            if (args.Length == 0)
+            _thread = new Thread(() => WorkerThreadFunc(args))
             {
-                eventLog.WriteEntry("No arguments set. Will use PreventSleep mode.", EventLogEntryType.Warning);
-                args = new string[] { "-s" };
-            }
-            if (args.Length == 1)
-            {
-                isSuccess = ParseSingleParam(args[0]);
-            }
-            else
-            {
-                isSuccess = ParseMultipleParams(args);
-            }
-
-            if (isSuccess)
-            {
-                eventLog.WriteEntry("Executing...");
-            }
-            else
-            {
-                eventLog.WriteEntry("Failed.", EventLogEntryType.Error);
-            }
+                Name = "Sleep Preventer by Gennadius Thread",
+                Priority = ThreadPriority.Highest
+            };
+            _thread.Start();
         }
 
         protected override void OnStop()
         {
+            _shutdownEvent.Set();
+            if (!_thread.Join(10000))
+            {
+                _thread.Abort();
+            }
             eventLog.WriteEntry("Stopped.");
+        }
+
+        void WorkerThreadFunc(string[] args)
+        {
+            while (!_shutdownEvent.WaitOne(0))
+            {
+                bool isSuccess = true;
+                if (args.Length == 0)
+                {
+                    eventLog.WriteEntry("No arguments set. Will use PreventSleep mode.", EventLogEntryType.Warning);
+                    args = new string[] { "-s" };
+                }
+                if (args.Length == 1)
+                {
+                    isSuccess = ParseSingleParam(args[0]);
+                }
+                else
+                {
+                    isSuccess = ParseMultipleParams(args);
+                }
+
+                if (!isSuccess)
+                {
+                    eventLog.WriteEntry("Failed.", EventLogEntryType.Error);
+                }
+                Thread.Sleep(5000);
+            }
         }
 
         bool ParseSingleParam(string arg)
