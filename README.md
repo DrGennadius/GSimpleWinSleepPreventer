@@ -7,6 +7,8 @@ The utility uses [SetThreadExecutionState](https://docs.microsoft.com/en-us/wind
 
 **SetThreadExecutionState** is used to stop the machine timing out and entering standby/switching the display device off.
 
+## Portable standalone application
+
 Command for help:
 
 ```shell
@@ -70,4 +72,8 @@ GSimpleWinSleepPreventer.exe -a
 ```
 
 ![image](https://user-images.githubusercontent.com/27915885/141684880-a91feced-723b-42a5-8092-534e2dd296d0.png)
+
+## Windows Service
+
+You can install service on system.
 

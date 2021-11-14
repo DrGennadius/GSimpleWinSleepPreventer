@@ -3,12 +3,12 @@
 	<Product Id="*" 
              Name="GSimpleWinSleepPreventer.Service" 
              Language="1033" 
-             Version="0.2.3.0" 
+             Version="0.3.0.0" 
              Manufacturer="Gennady Zykov" 
              UpgradeCode="20eca456-35e6-4b92-af86-2bc299b3dd9e">
         <Package
             Keywords='Installer'
-            Description="Gennadius's GSimpleWinSleepPreventer.Service 0.2.3 Installer"
+            Description="Gennadius's GSimpleWinSleepPreventer.Service 0.3.0 Installer"
             InstallerVersion="200" 
             Compressed="yes" 
             Manufacturer="Gennady Zykov" 
