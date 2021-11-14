@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
 
@@ -76,24 +77,24 @@ namespace GSimpleWinSleepPreventer
         static void PrintHelp()
         {
             Console.WriteLine("Help.");
-            Console.WriteLine("\nFast modes:");
-            Console.WriteLine("  --monitor, -m          Prevent only monitor powerdown.");
-            Console.WriteLine("  --sleep, -s            Prevent Idle-to-Sleep (monitor not affected).");
-            Console.WriteLine("  --awake, -a            Keep system awake.");
-            Console.WriteLine("  --help, -h             Show help.");
+            Console.WriteLine("\nQuick modes:");
+            Console.WriteLine("  --monitor, -m    Prevent only monitor powerdown.");
+            Console.WriteLine("  --sleep, -s      Prevent Idle-to-Sleep (monitor not affected).");
+            Console.WriteLine("  --awake, -a      Keep system awake.");
+            Console.WriteLine("  --help, -h       Show help.");
             Console.WriteLine("\nManually set several modes:");
             Console.WriteLine("  --ExecutionState, -es [modes]  Available modes: continuous, display, system, away.");
-            Console.WriteLine("                                 continuous - Informs the system that the state being set should remain in");
-            Console.WriteLine("                                              effect until the next call that uses ES_CONTINUOUS and one of");
-            Console.WriteLine("                                              the other state flags is cleared.");
-            Console.WriteLine("                                 display - Forces the display to be on by resetting the display idle timer.");
-            Console.WriteLine("                                 system - Forces the system to be in the working state by resetting the");
-            Console.WriteLine("                                          system idle timer.");
-            Console.WriteLine("                                 away - Enables away mode. This value must be specified with ES_CONTINUOUS.");
-            Console.WriteLine("                                        Away mode should be used only by media-recording and");
-            Console.WriteLine("                                        media-distribution applications that must perform critical");
-            Console.WriteLine("                                        background processing on desktop computers while the computer");
-            Console.WriteLine("                                        appears to be sleeping. See Remarks.");
+            Console.WriteLine("      continuous - Informs the system that the state being set should remain in");
+            Console.WriteLine("                   effect until the next call that uses ES_CONTINUOUS and one of");
+            Console.WriteLine("                   the other state flags is cleared.");
+            Console.WriteLine("      display    - Forces the display to be on by resetting the display idle timer.");
+            Console.WriteLine("      system     - Forces the system to be in the working state by resetting the");
+            Console.WriteLine("                   system idle timer.");
+            Console.WriteLine("      away       - Enables away mode. This value must be specified with ES_CONTINUOUS.");
+            Console.WriteLine("                   Away mode should be used only by media-recording and");
+            Console.WriteLine("                   media-distribution applications that must perform critical");
+            Console.WriteLine("                   background processing on desktop computers while the computer");
+            Console.WriteLine("                   appears to be sleeping.");
         }
 
         static bool ParseSingleParam(string arg)
@@ -115,7 +116,7 @@ namespace GSimpleWinSleepPreventer
                     break;
                 case "--help":
                 case "-h":
-                    PrintHelp();
+                    isShowHelpOnly = true;
                     break;
                 default:
                     Console.WriteLine($"{arg} is an unknown command.");
@@ -146,7 +147,8 @@ namespace GSimpleWinSleepPreventer
                 }
                 if (!isShowHelpOnly)
                 {
-                    SetThreadExecutionState(executionStateMode);
+                    string consoleMessage = $"Manual set of the execution states [{string.Join(", ", args.Skip(1))}]";
+                    InternalSetThreadExecutionState(consoleMessage, executionStateMode);
                 }
             }
             else
@@ -162,8 +164,8 @@ namespace GSimpleWinSleepPreventer
         /// </summary>
         static void AllowPowerdown()
         {
-            Console.WriteLine("Allow Powerdown ON.");
-            SetThreadExecutionState(EXECUTION_STATE.ES_CONTINUOUS);
+            InternalSetThreadExecutionState("Allow Powerdown",
+                EXECUTION_STATE.ES_CONTINUOUS);
         }
 
         /// <summary>
@@ -171,8 +173,8 @@ namespace GSimpleWinSleepPreventer
         /// </summary>
         static void PreventMonitorPowerdown()
         {
-            Console.WriteLine("Prevent Monitor Powerdown ON.");
-            SetThreadExecutionState(EXECUTION_STATE.ES_CONTINUOUS | EXECUTION_STATE.ES_DISPLAY_REQUIRED);
+            InternalSetThreadExecutionState("Prevent Monitor Powerdown",
+                EXECUTION_STATE.ES_CONTINUOUS | EXECUTION_STATE.ES_DISPLAY_REQUIRED);
         }
 
         /// <summary>
@@ -180,8 +182,8 @@ namespace GSimpleWinSleepPreventer
         /// </summary>
         static void PreventSleep()
         {
-            Console.WriteLine("Prevent Sleep ON.");
-            SetThreadExecutionState(EXECUTION_STATE.ES_CONTINUOUS | EXECUTION_STATE.ES_AWAYMODE_REQUIRED);
+            InternalSetThreadExecutionState("Prevent Sleep",
+                EXECUTION_STATE.ES_CONTINUOUS | EXECUTION_STATE.ES_AWAYMODE_REQUIRED);
         }
 
         /// <summary>
@@ -189,8 +191,21 @@ namespace GSimpleWinSleepPreventer
         /// </summary>
         static void KeepSystemAwake()
         {
-            Console.WriteLine("Keep System Awake ON.");
-            SetThreadExecutionState(EXECUTION_STATE.ES_CONTINUOUS | EXECUTION_STATE.ES_SYSTEM_REQUIRED);
+            InternalSetThreadExecutionState("Keep System Awake",
+                EXECUTION_STATE.ES_CONTINUOUS | EXECUTION_STATE.ES_SYSTEM_REQUIRED);
+        }
+
+        static void InternalSetThreadExecutionState(string consoleMessagePart, EXECUTION_STATE executionStates)
+        {
+            try
+            {
+                SetThreadExecutionState(executionStates);
+                Console.WriteLine($"{consoleMessagePart} ON.");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"An error has occurred while setting system state.\n{ex}");
+            }
         }
     }
 }
