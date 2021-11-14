@@ -5,6 +5,8 @@
 
 **SetThreadExecutionState** используется для остановки тайм-аута машины и перехода в режим ожидания / выключения устройства отображения.
 
+## Портативное автономное приложение
+
 Команда для помощи:
 
 ```shell
@@ -68,3 +70,17 @@ GSimpleWinSleepPreventer.exe -a
 ```
 
 ![image](https://user-images.githubusercontent.com/27915885/141684880-a91feced-723b-42a5-8092-534e2dd296d0.png)
+
+## Windows Сервис
+
+Можно установить сервис на систему.
+
+![image](https://user-images.githubusercontent.com/27915885/141693790-989c57f0-2fea-4a1a-b8dc-6fe25e667f90.png)
+
+![image](https://user-images.githubusercontent.com/27915885/141693810-444e2567-4c22-413f-b0c6-f1cdd0b4abbd.png)
+
+Это позволит автоматически запускаться при старте системы.
+
+Есть возможность смотреть логи в Event Viewer.
+
+![image](https://user-images.githubusercontent.com/27915885/141693948-e1b7a275-c34d-4c59-80fd-c48fda3d2f98.png)
