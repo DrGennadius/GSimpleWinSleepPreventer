@@ -3,12 +3,12 @@
 	<Product Id="*" 
              Name="GSimpleWinSleepPreventer.Service" 
              Language="1033" 
-             Version="0.3.1.0" 
+             Version="0.3.2.0" 
              Manufacturer="Gennady Zykov" 
              UpgradeCode="20eca456-35e6-4b92-af86-2bc299b3dd9e">
         <Package
             Keywords='Installer'
-            Description="Gennadius's GSimpleWinSleepPreventer.Service 0.3.1 Installer"
+            Description="Gennadius's GSimpleWinSleepPreventer.Service 0.3.2 Installer"
             InstallerVersion="200" 
             Compressed="yes" 
             Manufacturer="Gennady Zykov" 
@@ -38,9 +38,17 @@
 	<Fragment>
 		<ComponentGroup Id="ProductComponents" 
                         Directory="INSTALLFOLDER">
-			 <Component Id="GSimpleWinSleepPreventer.Service">
+            <Component Id="GSimpleWinSleepPreventer" Guid="*">
+                <File Id="GSimpleWinSleepPreventer.exe"
+                      Name="GSimpleWinSleepPreventer.exe"
+                      KeyPath="yes"
+                      DiskId="1"
+                      Source="..\GSimpleWinSleepPreventer\bin\Release\GSimpleWinSleepPreventer.exe"/>
+            </Component>
+            <Component Id="GSimpleWinSleepPreventer.Service" Guid="*">
                  <File Id="GSimpleWinSleepPreventer.Service.exe" 
                        Name="GSimpleWinSleepPreventer.Service.exe" 
+                       KeyPath="yes"
                        DiskId="1" 
                        Source="..\GSimpleWinSleepPreventer.Service\bin\Release\GSimpleWinSleepPreventer.Service.exe"/>
                  <ServiceInstall Id="GSimpleWinSleepPreventer.Service" 
@@ -52,14 +60,14 @@
                                  ErrorControl="normal" 
                                  Account="LocalSystem"
                                  Vital="yes" 
-                                 Interactive="no"/>
+                                 Interactive="yes"/>
                  <ServiceControl Id="GSimpleWinSleepPreventer.Service" 
                                  Name="GSimpleWinSleepPreventer.Service" 
                                  Start="install" 
                                  Stop="both" 
                                  Remove="uninstall" 
                                  Wait="yes"/>
-			 </Component> 
+			 </Component>
 		</ComponentGroup>
 	</Fragment>
 </Wix>

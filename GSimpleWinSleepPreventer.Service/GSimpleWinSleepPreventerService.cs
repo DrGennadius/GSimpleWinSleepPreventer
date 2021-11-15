@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.ServiceProcess;
 using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace GSimpleWinSleepPreventer.Service
 {
@@ -21,6 +23,7 @@ namespace GSimpleWinSleepPreventer.Service
         const string _logName = "GSimpleWinSleepPreventerServiceLog";
 
         ManualResetEvent _shutdownEvent = new ManualResetEvent(false);
+        Process _process;
         Thread _thread;
 
         [Flags]
@@ -72,20 +75,60 @@ namespace GSimpleWinSleepPreventer.Service
         protected override void OnStart(string[] args)
         {
             eventLog.WriteEntry($"Starting Simple Windows Sleep Preventer by Gennadius (Gennady Zykov). Version {Assembly.GetExecutingAssembly().GetName().Version}.\n");
-            _thread = new Thread(() => WorkerThreadFunc(args))
+            if (args.Length == 0)
             {
-                Name = "Sleep Preventer by Gennadius Thread",
-                Priority = ThreadPriority.Highest
+                eventLog.WriteEntry("No arguments set. Will use PreventSleep mode.", EventLogEntryType.Warning);
+                args = new string[] { "-s" };
+            }
+            eventLog.WriteEntry($"Service location: {Assembly.GetExecutingAssembly().Location}");
+            string gSimpleWinSleepPreventerPath = Path.Combine(
+                Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "GSimpleWinSleepPreventer.exe");
+            eventLog.WriteEntry($"{gSimpleWinSleepPreventerPath} exists: {File.Exists(gSimpleWinSleepPreventerPath)}");
+            ProcessStartInfo procStartInfo = new ProcessStartInfo()
+            {
+                FileName = "cmd.exe",
+                Arguments = $"/C \"{gSimpleWinSleepPreventerPath}\" {string.Join(" ", args)}",
+                UseShellExecute = true
             };
-            _thread.Start();
+
+            try
+            {
+                _process = new Process();
+                _process.StartInfo = procStartInfo;
+                bool isStarted = _process.Start();
+                if (isStarted)
+                {
+                    eventLog.WriteEntry($"Started process (id: {_process.Id}) with arguments: {procStartInfo.Arguments}.");
+                }
+                else
+                {
+                    eventLog.WriteEntry($"Failed to start the process with arguments: {procStartInfo.Arguments}.", EventLogEntryType.Error);
+                    Stop();
+                }
+            }
+            catch (Exception ex)
+            {
+                eventLog.WriteEntry($"Exception:\n{ex}", EventLogEntryType.Error);
+                Stop();
+            }
         }
 
         protected override void OnStop()
         {
-            _shutdownEvent.Set();
-            if (!_thread.Join(10000))
+            if (_process != null)
             {
-                _thread.Abort();
+                try
+                {
+                    if (!_process.HasExited)
+                    {
+                        _process.Kill();
+                    }
+                    _process.Dispose();
+                }
+                catch (Exception ex)
+                {
+                    eventLog.WriteEntry($"Exception:\n{ex}", EventLogEntryType.Error);
+                }
             }
             eventLog.WriteEntry("Stopped.");
         }
@@ -215,8 +258,8 @@ namespace GSimpleWinSleepPreventer.Service
         {
             try
             {
-                SetThreadExecutionState(executionStates);
-                eventLog.WriteEntry($"{logMessagePart} ON.", EventLogEntryType.Information);
+                EXECUTION_STATE executionState = SetThreadExecutionState(executionStates);
+                eventLog.WriteEntry($"{logMessagePart} ON ({executionState}).", EventLogEntryType.Information);
             }
             catch (Exception ex)
             {
