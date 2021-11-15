@@ -5,10 +5,6 @@ VisualStudioVersion = 16.0.31729.503
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GSimpleWinSleepPreventer", "GSimpleWinSleepPreventer\GSimpleWinSleepPreventer.csproj", "{223843D4-050C-4CB3-8226-C84F8DA3D20E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GSimpleWinSleepPreventer.Service", "GSimpleWinSleepPreventer.Service\GSimpleWinSleepPreventer.Service.csproj", "{601DE233-81ED-4D8E-8B10-C9D97FBEDDBD}"
-EndProject
-Project("{930C7802-8A8C-48F9-8165-68863BCCD9DD}") = "GSimpleWinSleepPreventer.Service.Installer", "GSimpleWinSleepPreventer.Service.Installer\GSimpleWinSleepPreventer.Service.Installer.wixproj", "{37798C4C-85CD-4FDE-AB69-5CCA8DD746C1}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -25,20 +21,6 @@ Global
 		{223843D4-050C-4CB3-8226-C84F8DA3D20E}.Release|Any CPU.Build.0 = Release|Any CPU
 		{223843D4-050C-4CB3-8226-C84F8DA3D20E}.Release|x86.ActiveCfg = Release|Any CPU
 		{223843D4-050C-4CB3-8226-C84F8DA3D20E}.Release|x86.Build.0 = Release|Any CPU
-		{601DE233-81ED-4D8E-8B10-C9D97FBEDDBD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{601DE233-81ED-4D8E-8B10-C9D97FBEDDBD}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{601DE233-81ED-4D8E-8B10-C9D97FBEDDBD}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{601DE233-81ED-4D8E-8B10-C9D97FBEDDBD}.Debug|x86.Build.0 = Debug|Any CPU
-		{601DE233-81ED-4D8E-8B10-C9D97FBEDDBD}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{601DE233-81ED-4D8E-8B10-C9D97FBEDDBD}.Release|Any CPU.Build.0 = Release|Any CPU
-		{601DE233-81ED-4D8E-8B10-C9D97FBEDDBD}.Release|x86.ActiveCfg = Release|Any CPU
-		{601DE233-81ED-4D8E-8B10-C9D97FBEDDBD}.Release|x86.Build.0 = Release|Any CPU
-		{37798C4C-85CD-4FDE-AB69-5CCA8DD746C1}.Debug|Any CPU.ActiveCfg = Debug|x86
-		{37798C4C-85CD-4FDE-AB69-5CCA8DD746C1}.Debug|x86.ActiveCfg = Debug|x86
-		{37798C4C-85CD-4FDE-AB69-5CCA8DD746C1}.Debug|x86.Build.0 = Debug|x86
-		{37798C4C-85CD-4FDE-AB69-5CCA8DD746C1}.Release|Any CPU.ActiveCfg = Release|x86
-		{37798C4C-85CD-4FDE-AB69-5CCA8DD746C1}.Release|x86.ActiveCfg = Release|x86
-		{37798C4C-85CD-4FDE-AB69-5CCA8DD746C1}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
