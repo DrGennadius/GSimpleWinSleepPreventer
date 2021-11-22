@@ -16,7 +16,7 @@ namespace GSimpleWinSleepPreventer
         {
             /// <summary>
             /// Enables away mode. This value must be specified with ES_CONTINUOUS.
-            /// Away mode should be used only by media-recording and media-distribution applications that must perform critical background processing on desktop computers while the computer appears to be sleeping. See Remarks.
+            /// Away mode should be used only by media-recording and media-distribution applications that must perform critical background processing on desktop computers while the computer appears to be sleeping.
             /// </summary>
             ES_AWAYMODE_REQUIRED = 0x00000040,
 
@@ -81,6 +81,7 @@ namespace GSimpleWinSleepPreventer
             Console.WriteLine("  --monitor, -m    Prevent only monitor powerdown.");
             Console.WriteLine("  --sleep, -s      Prevent Idle-to-Sleep (monitor not affected).");
             Console.WriteLine("  --awake, -a      Keep system awake.");
+            Console.WriteLine("  --full, -f       Uses all modes (display, system, away).");
             Console.WriteLine("  --help, -h       Show help.");
             Console.WriteLine("\nManually set several modes:");
             Console.WriteLine("  --ExecutionState, -es [modes]  Available modes: continuous, display, system, away.");
@@ -113,6 +114,10 @@ namespace GSimpleWinSleepPreventer
                 case "--awake":
                 case "-a":
                     KeepSystemAwake();
+                    break;
+                case "--full":
+                case "-f":
+                    FullPrevent();
                     break;
                 case "--help":
                 case "-h":
@@ -193,6 +198,18 @@ namespace GSimpleWinSleepPreventer
         {
             InternalSetThreadExecutionState("Keep System Awake",
                 EXECUTION_STATE.ES_CONTINUOUS | EXECUTION_STATE.ES_SYSTEM_REQUIRED);
+        }
+
+        /// <summary>
+        /// Full Prevent. Uses all modes (display, system, away) in continuous.
+        /// </summary>
+        static void FullPrevent()
+        {
+            InternalSetThreadExecutionState("Full Prevent",
+                EXECUTION_STATE.ES_CONTINUOUS 
+                | EXECUTION_STATE.ES_DISPLAY_REQUIRED
+                | EXECUTION_STATE.ES_SYSTEM_REQUIRED
+                | EXECUTION_STATE.ES_AWAYMODE_REQUIRED);
         }
 
         static void InternalSetThreadExecutionState(string consoleMessagePart, EXECUTION_STATE executionStates)

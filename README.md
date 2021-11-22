@@ -71,4 +71,10 @@ GSimpleWinSleepPreventer.exe -s
 GSimpleWinSleepPreventer.exe -a
 ```
 
+4. **full** - enable full prevent. Uses all modes (display, system, away) in continuous: `ES_CONTINUOUS`, `ES_DISPLAY_REQUIRED`, `ES_SYSTEM_REQUIRED` and `ES_AWAYMODE_REQUIRED`.
+
+```shell
+GSimpleWinSleepPreventer.exe -f
+```
+
 ![image](https://user-images.githubusercontent.com/27915885/141684880-a91feced-723b-42a5-8092-534e2dd296d0.png)
